@@ -1,0 +1,85 @@
+{
+    "name": "cmake-tools-helper",
+    "displayName": "CMake Tools Helper",
+    "description": "Enables cpptools to automatically know the information parsed by CMake Tools (e.g. include directories and defines)",
+    "version": "0.0.1",
+    "publisher": "maddouri",
+    "license": "BSD-3-Clause",
+    "icon": "res/icon.png",
+    "bugs": {
+        "url": "https://github.com/maddouri/vscode-cmake-tools-helper/issues"
+    },
+    "homepage": "https://github.com/maddouri/vscode-cmake-tools-helper/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maddouri/vscode-cmake-tools-helper.git"
+    },
+    "engines": {
+        "vscode": "^1.12.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "cmake",
+        "tools",
+        "helper",
+        "build",
+        "c++",
+        "native"
+    ],
+    "activationEvents": [
+        "onCommand:cmake.update_cpptools",
+        "onCommand:cmake.show_active_cmake_config_name",
+        "workspaceContains:CMakeLists.txt",
+        "onCommand:cmake.buildWithTarget",
+        "onCommand:cmake.cleanConfigure",
+        "onCommand:cmake.configure",
+        "onCommand:cmake.setBuildType",
+        "onCommand:cmake.setDefaultTarget"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "cmake.show_active_cmake_config_name",
+                "title": "Show active CMake config name",
+                "category": "CMake"
+            },
+            {
+                "command": "cmake.update_cpptools",
+                "title": "Update cpptools",
+                "category": "CMake"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "CMake Helper Configuration",
+            "properties": {
+                "cmake-tools-helper.fs_delay_ms": {
+                    "type": "number",
+                    "default": 1000,
+                    "description": "Additional delay [ms] between 2 consecutive calls to fs.* methods. (e.g. fs.writeFile())"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "extensionDependencies": [
+        "ms-vscode.cpptools",
+        "vector-of-bool.cmake-tools"
+    ],
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "proxy-observe": "^0.0.21",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    }
+}
