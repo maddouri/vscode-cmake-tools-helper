@@ -1,11 +1,14 @@
 # CMake Tools Helper
 
+[![](https://vsmarketplacebadge.apphb.com/version/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
+[![](https://vsmarketplacebadge.apphb.com/installs/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
+
 This extension helps to bridge a gap between 2 great extensions:
 
 * [C/C++ (`ms-vscode.cpptools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) by Microsoft: Provides C and C++ language support (auto-completion, go to definition, etc.)
 * [CMake Tools (`vector-of-bool.cmake-tools`)](https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools) by vector-of-bool: Provides support for CMake-based projects (configure, build, etc.)
 
-CMake Tools Helper enables cpptools to **automatically** know the information parsed by CMake Tools (such as **include directories** and **defines**) and use it to provide auto-completion, go to definition, etc.
+[CMake Tools Helper](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) enables cpptools to **automatically** know the information parsed by CMake Tools (such as **include directories** and **defines**) and use it to provide auto-completion, go to definition, etc.
 
 ## Features
 
