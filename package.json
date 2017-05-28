@@ -74,6 +74,9 @@
         "ms-vscode.cpptools",
         "vector-of-bool.cmake-tools"
     ],
+    "dependencies": {
+        "proxy-observe": "^0.0.21"
+    },
     "devDependencies": {
         "typescript": "^2.0.3",
         "vscode": "^1.0.0",
