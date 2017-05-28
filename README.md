@@ -1,7 +1,6 @@
 # CMake Tools Helper
 
-[![](https://vsmarketplacebadge.apphb.com/version/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
-[![](https://vsmarketplacebadge.apphb.com/installs/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
+[![Version](http://vsmarketplacebadge.apphb.com/version/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) [![Installs](http://vsmarketplacebadge.apphb.com/installs/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) [![Ratings](https://vsmarketplacebadge.apphb.com/rating/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
 
 This extension helps to bridge a gap between 2 great extensions:
 
@@ -59,17 +58,3 @@ Each time CMake Tools Helper is notified, the following happens:
 1. In order force cpptools to use CMake Tools' current configuration, at any given point in time, only that configuration is present in `c_cpp_properties.json`. This is a workaround to the fact that cpptools doesn't export any API that other extensions could use to interact with it. This particular solution was inspired by the implementation of `handleConfigurationChange` (`ms-vscode.cpptools-0.11.2/out/src/LanguageServer/C_Cpp_ConfigurationProperties.js`)
 1. The "all" target is not handled and selecting it results in a "null" configuration in `c_cpp_properties.json`
 1. I use and test this extension exclusively in an up-to-date version of VSCode **Insiders**
-
-## Release Notes
-
-### 0.0.3
-
-* Add `proxy-observe` as a runtime dependency
-
-### 0.0.2
-
-* Fix null/undefined ref usage
-
-### 0.0.1
-
-* Initial release
