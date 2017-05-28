@@ -75,15 +75,17 @@ export class c_cpp_properties {
         this.configurations = [ new configuration(null, null, null) ];
 
         // add the other/useful configs
-        configs.forEach(cfg => {
-            cfg.projects.forEach(prj => {
-                prj.targets.forEach(tgt => {
-                    if (tgt.name && !excludedTargets.includes(tgt.name)) {
-                        this.configurations.push(new configuration(prj, tgt, cfg.name));
-                    }
+        if (configs != null) {
+            configs.forEach(cfg => {
+                cfg.projects.forEach(prj => {
+                    prj.targets.forEach(tgt => {
+                        if (tgt.name && !excludedTargets.includes(tgt.name)) {
+                            this.configurations.push(new configuration(prj, tgt, cfg.name));
+                        }
+                    });
                 });
             });
-        });
+        }
     }
 
     writeFile(callback = null) {

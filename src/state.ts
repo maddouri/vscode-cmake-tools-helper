@@ -45,12 +45,17 @@ export class CMakeToolsHelper {
             // cmakeToolsWrapper           : CMakeToolsWrapper
             // cmakeToolsWrapper._codeModel: CodeModelContent
 
-            const configs             = cmakeToolsWrapper._codeModel.configurations;  // CodeModelConfiguration
+            const codeModel           = cmakeToolsWrapper._codeModel;
+            const configs             = ((typeof codeModel === 'undefined') || (codeModel == null))
+                                      ? null
+                                      : codeModel.configurations;  // CodeModelConfiguration
             const activeGenerator     = cmakeToolsWrapper.activeGenerator;
             const activeTargetName    = cmakeToolsWrapper.defaultBuildTarget;
             const activeBuiltTypeName = cmakeToolsWrapper.selectedBuildType;
-            const activeConfig        = configs.find(c => (c.name == activeBuiltTypeName));
-            const activeProject       = typeof activeConfig === 'undefined'
+            const activeConfig        = ((typeof configs === 'undefined') || (configs == null))
+                                      ? null
+                                      : configs.find(c => (c.name == activeBuiltTypeName));
+            const activeProject       = ((typeof activeConfig === 'undefined') || (activeConfig == null))
                                       ? null
                                       : activeConfig.projects.find(p => (typeof p.targets.find(t => (t.name == activeTargetName)) !== 'undefined'));  // CodeModelProject
             //const activeTarget        = typeof activeProject !== 'undefined'
@@ -66,7 +71,10 @@ export class CMakeToolsHelper {
         this.activeCMakeConfigName().then(activeConfigName => {
             this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
                 // get all the configs
-                const cmakeConfigs = cmakeToolsWrapper._codeModel.configurations;  // CodeModelConfiguration
+                const codeModel    = cmakeToolsWrapper._codeModel;
+                const cmakeConfigs = ((typeof codeModel === 'undefined') || (codeModel == null))
+                                   ? null
+                                   : codeModel.configurations;  // CodeModelConfiguration
                 let   props        = new c_cpp_properties(cmakeConfigs);
 
                 // place the active config at the beginning of the array
