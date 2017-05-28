@@ -62,6 +62,10 @@ Each time CMake Tools Helper is notified, the following happens:
 
 ## Release Notes
 
+### 0.0.3
+
+* Add `proxy-observe` as a runtime dependency
+
 ### 0.0.2
 
 * Fix null/undefined ref usage
