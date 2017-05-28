@@ -62,6 +62,10 @@ Each time CMake Tools Helper is notified, the following happens:
 
 ## Release Notes
 
+### 0.0.2
+
+* Fix null/undefined ref usage
+
 ### 0.0.1
 
 * Initial release
