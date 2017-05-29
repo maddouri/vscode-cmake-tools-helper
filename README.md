@@ -2,6 +2,10 @@
 
 [![Version](http://vsmarketplacebadge.apphb.com/version/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) [![Installs](http://vsmarketplacebadge.apphb.com/installs/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) [![Ratings](https://vsmarketplacebadge.apphb.com/rating/maddouri.cmake-tools-helper.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper)
 
+[![Dependencies Status](https://david-dm.org/maddouri/vscode-cmake-tools-helper/status.svg?style=flat-square)](https://david-dm.org/maddouri/vscode-cmake-tools-helper)
+[![DevDependencies Status](https://david-dm.org/maddouri/vscode-cmake-tools-helper/dev-status.svg?style=flat-square)](https://david-dm.org/maddouri/vscode-cmake-tools-helper?type=dev)
+
+
 This extension helps to bridge a gap between 2 great extensions:
 
 * [C/C++ (`ms-vscode.cpptools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) by Microsoft: Provides C and C++ language support (auto-completion, go to definition, etc.)
