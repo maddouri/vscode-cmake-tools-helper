@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
 import * as helper from './helper';
 
 export class browse {
@@ -89,6 +90,18 @@ export class c_cpp_properties {
     }
 
     writeFile(callback = null) {
+        mkdirp(helper.vscodeFolderPath(), err => {
+            if (err) {
+                const msg = "Fail: Creation of the .vscode directory";
+                console.error(msg);
+                vscode.window.showErrorMessage(msg);
+            } else {
+                this.writeFile_actual(callback);
+            }
+        });
+    }
+
+    writeFile_actual(callback = null) {
         // 1. open the file. write the active config alone. close the file.
         // 2. (disabled for now) open the file. write all the configs. close the file.
         // 3. this should
