@@ -2,7 +2,6 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as hooks from 'hooks';
 import 'proxy-observe';  // will add observe() to Object
 
 import * as helper from './helper';
