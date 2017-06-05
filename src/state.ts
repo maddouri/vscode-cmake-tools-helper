@@ -2,7 +2,6 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import 'proxy-observe';  // will add observe() to Object
 
 import * as helper from './helper';
 import {c_cpp_properties} from './c_cpp_properties';

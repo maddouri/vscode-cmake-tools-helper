@@ -77,11 +77,11 @@
         "mkdirp": "^0.5.1"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
+        "typescript": "^2.3.4",
+        "vscode": "^1.1.0",
         "mkdirp": "^0.5.1",
         "mocha": "^3.4.2",
-        "@types/node": "^7.0.22",
-        "@types/mocha": "^3.4.2"
+        "@types/node": "^7.0.27",
+        "@types/mocha": "^2.2.41"
     }
 }
