@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.0.6
+
+* Use CMake Tools 0.9.5 API to be notified by config/target changes
+* Minor code fixes/refactoring
+
 ## 0.0.5
 
 * Create the .vscode directory if it doesn't exist (should fix some issues on Linux)

@@ -2,7 +2,7 @@
     "name": "cmake-tools-helper",
     "displayName": "CMake Tools Helper",
     "description": "Enables cpptools to automatically know the information parsed by CMake Tools (e.g. include directories and defines)",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "maddouri",
     "license": "BSD-3-Clause",
     "icon": "res/icon.png",
