@@ -7,7 +7,7 @@
 
 This extension helps to bridge a gap between 2 great extensions:
 
-* [C/C++ (`ms-vscode.cpptools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) by Microsoft: Provides C and C++ language support (auto-completion, go to definition, etc.)
+* [cpptools (`ms-vscode.cpptools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) by Microsoft: Provides C and C++ language support (auto-completion, go to definition, etc.)
 * [CMake Tools (`vector-of-bool.cmake-tools`)](https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools) by vector-of-bool: Provides support for CMake-based projects (configure, build, etc.)
 
 [CMake Tools Helper](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) enables cpptools to **automatically** know the information parsed by CMake Tools (such as **include directories** and **defines**) and use it to provide auto-completion, go to definition, etc.
@@ -16,6 +16,11 @@ This extension helps to bridge a gap between 2 great extensions:
 
 * Automatically updates cpptools' `c_cpp_properties.json` with the current CMake target's information (**build type**, **include directories** and **defines**)
 * Automatically updates cpptools' active configuration to match CMake Tools' active configuration and target
+
+## Prerequisites
+
+* CMake Tools with `cmake.experimental.useCMakeServer` set to `true`
+* cpptools (please note that this extension has to overwrite the content of the `c_cpp_properties.json`)
 
 ## Why
 
