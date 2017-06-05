@@ -19,8 +19,8 @@ This extension helps to bridge a gap between 2 great extensions:
 
 ## Prerequisites
 
-* CMake Tools with `cmake.experimental.useCMakeServer` set to `true`
-* cpptools (please note that this extension has to overwrite the content of the `c_cpp_properties.json`)
+* CMake Tools with `cmake.useCMakeServer` set to `true`
+* cpptools (please note that **this extension has to overwrite the content of `c_cpp_properties.json`**)
 
 ## Why
 
@@ -43,17 +43,24 @@ This extension's code is not too long to go over, but the short answer is: Ugly 
 
 A combination of:
 
-* `vscode.extensions.getExtension("vector-of-bool.cmake-tools").exports`: Allows getting the name of the currently-selected build target as well as the list of valid CMake configurations
-* A file watcher on `.cmaketools.json`: CMake Tools updates this file after (re)configuring the project (first config, change of build type, etc.) so it can be used to get notified when the config changes
-* An [observer](https://www.npmjs.com/package/proxy-observe) on the status bar element that CMake tools uses to display the active build target: As of CMake Tools v0.9.4, this is the only way/hack I found in order to be notified when the build target changes
+* `vscode.extensions.getExtension("vector-of-bool.cmake-tools").exports`: is the CMake Tools extension API. It allows getting the name of the currently-selected build target as well as the list of valid CMake configurations. Currently, CMake Tools provides 2 implementations:
+    * legacy: compatible with CMake < 3.7.1 and does not use CMake Server. It does provide a per-file information (as opposed to per-targte compilation info)
+    * client: compatibl with CMake >= 3.7.1 and uses CMake Server. It provides a "code model" that provides per-target compilation information
 
-#### Mirroring the Information in cpptools
+    CMake Tools Helper uses the "client" implementation and therefore requires the `cmake.useCMakeServer` setting to be `true`
+* Event listeners: CMake Tools API >= 0.9.5 provides the following events:
+    * reconfigured
+    * targetChangedEvent
+
+    CMake Tools Helper uses them in order to be notified when the configuration and/or the default build target changes
+
+#### Mirroring the Information to cpptools
 
 Each time CMake Tools Helper is notified, the following happens:
 
 1. CMake Tools Helper
     1. Gets the current configuration and target name from CMake Tools
-    2. Overrides the content of `c_cpp_properties.json` using the information from step 1
+    2. **Overrides** the content of `c_cpp_properties.json` using the information from step 1
 1. VSCode notifies cpptools that `c_cpp_properties.json` has changed (as of cpptools v0.11.2 has a file watcher on it)
 1. cpptools:
     1. Parses `c_cpp_properties.json`
@@ -64,5 +71,5 @@ Each time CMake Tools Helper is notified, the following happens:
 ## Limitations / Known Issues
 
 1. In order force cpptools to use CMake Tools' current configuration, at any given point in time, only that configuration is present in `c_cpp_properties.json`. This is a workaround to the fact that cpptools doesn't export any API that other extensions could use to interact with it. This particular solution was inspired by the implementation of `handleConfigurationChange` (`ms-vscode.cpptools-0.11.2/out/src/LanguageServer/C_Cpp_ConfigurationProperties.js`)
-1. The "all" target is not handled and selecting it results in a "null" configuration in `c_cpp_properties.json`
+1. CMake's extra targets (e.g. `all`, `clean`, `ALL_BUILD`, `ZERO_CHECK`, etc...) are not handled and selecting them results in a "null" configuration in `c_cpp_properties.json` (if you have ideas on what to do when those targets are selected, please feel free to open an issue on the repo, I'll see what I can do ;)
 1. I use and test this extension exclusively in an up-to-date version of VSCode **Insiders**
