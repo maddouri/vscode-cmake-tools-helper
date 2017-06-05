@@ -10,57 +10,70 @@ import {c_cpp_properties} from './c_cpp_properties';
 
 
 export class CMakeToolsHelper {
-    cmakeTools         = vscode.extensions.getExtension("vector-of-bool.cmake-tools");
-    cmakeToolsWatcher  = vscode.workspace.createFileSystemWatcher(
-        path.join(helper.vscodeFolderPath(), '.cmaketools.json')
-    );
+    cmakeTools = vscode.extensions.getExtension("vector-of-bool.cmake-tools");
 
     constructor() {
-        const onChange = (_?) => this.update_cpptools();
+        this.validateEnvironment();
 
-        // update on build type/config change
-        this.cmakeToolsWatcher.onDidChange(onChange);
-        this.cmakeToolsWatcher.onDidCreate(onChange);
-        this.cmakeToolsWatcher.onDidDelete(onChange);
+        const onChange = () => this.update_cpptools();
 
-        // update on target change
-        this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
-            // (Object as any) is for ignoring the error on observe() not being found (even though it has been added by 'proxy-observe')
-            cmakeToolsWrapper._statusBar = (Object as any).observe(cmakeToolsWrapper._statusBar, function(changeset) {
-                // lol it works :D
-                onChange();
-            });
+        // update on build config change
+        this.cmakeTools.exports.reconfigured(() => {
+            onChange();
+        });
+        // update on default target change
+        this.cmakeTools.exports.targetChangedEvent(() => {
+            onChange();
         });
 
         // first update
         onChange();
     }
 
+    validateEnvironment() {
+        if (!this.cmakeTools.isActive) {
+            const msg = 'CMake Tools is not active';
+            console.error(msg);
+            vscode.window.showErrorMessage(msg);
+        }
+        if (!vscode.workspace.getConfiguration('cmake').get<boolean>('useCMakeServer')) {
+            const msg = 'Please set \'cmake.useCMakeServer\' to \'true\'';
+            console.error(msg);
+            vscode.window.showErrorMessage(msg);
+        }
+    }
+
     activeCMakeConfigName()
     {
         return this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
 
-            // cmakeTools.exports          : CMakeToolsWrapper
-            // cmakeToolsWrapper           : CMakeToolsWrapper
-            // cmakeToolsWrapper._codeModel: CodeModelContent
+            // cmakeTools.exports         : CMakeToolsWrapper
+            // cmakeToolsWrapper          : CMakeToolsWrapper
+            // cmakeToolsWrapper.codeModel: CodeModelContent
 
-            const codeModel           = cmakeToolsWrapper._codeModel;
-            const configs             = ((typeof codeModel === 'undefined') || (codeModel == null))
-                                      ? null
-                                      : codeModel.configurations;  // CodeModelConfiguration
-            const activeGenerator     = cmakeToolsWrapper.activeGenerator;
+            if (cmakeToolsWrapper == null) {
+                return new Promise<string>(resolve => resolve(helper.makeConfigName(null, null, null)));
+            }
+
+            const codeModel           = cmakeToolsWrapper.codeModel;
+            const configs             = (codeModel != null)
+                                      ? codeModel.configurations  // CodeModelConfiguration
+                                      : null;
+            //const activeGenerator     = cmakeToolsWrapper.activeGenerator;
             const activeTargetName    = cmakeToolsWrapper.defaultBuildTarget;
             const activeBuiltTypeName = cmakeToolsWrapper.selectedBuildType;
-            const activeConfig        = ((typeof configs === 'undefined') || (configs == null))
-                                      ? null
-                                      : configs.find(c => (c.name == activeBuiltTypeName));
-            const activeProject       = ((typeof activeConfig === 'undefined') || (activeConfig == null))
-                                      ? null
-                                      : activeConfig.projects.find(p => (typeof p.targets.find(t => (t.name == activeTargetName)) !== 'undefined'));  // CodeModelProject
-            //const activeTarget        = typeof activeProject !== 'undefined'
-            //                          ? activeProject.targets.find(t => (t.name == activeTargetName))
-            //                          : undefined;  // CodeModelTarget
-            const activeProjectName   = activeProject == null ? null : activeProject.name;
+            const activeConfig        = (configs != null)
+                                      ? configs.find(c => (c.name == activeBuiltTypeName))
+                                      : null;
+            const activeProject       = (activeConfig != null)
+                                      ? activeConfig.projects.find(p => (typeof p.targets.find(t => (t.name == activeTargetName)) !== 'undefined'))  // CodeModelProject
+                                      : null;
+            //const activeTarget        = activeProject != null
+            //                          ? activeProject.targets.find(t => (t.name == activeTargetName)) // CodeModelTarget
+            //                          : null;
+            const activeProjectName   = (activeProject != null)
+                                      ? activeProject.name
+                                      : null;
 
             return new Promise<string>(resolve => resolve(helper.makeConfigName(activeProjectName, activeTargetName, activeBuiltTypeName)));
         });
@@ -70,7 +83,7 @@ export class CMakeToolsHelper {
         this.activeCMakeConfigName().then(activeConfigName => {
             this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
                 // get all the configs
-                const codeModel    = cmakeToolsWrapper._codeModel;
+                const codeModel    = cmakeToolsWrapper.codeModel;
                 const cmakeConfigs = ((typeof codeModel === 'undefined') || (codeModel == null))
                                    ? null
                                    : codeModel.configurations;  // CodeModelConfiguration

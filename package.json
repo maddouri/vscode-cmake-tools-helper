@@ -74,15 +74,13 @@
         "vector-of-bool.cmake-tools"
     ],
     "dependencies": {
-        "mkdirp": "^0.5.1",
-        "proxy-observe": "^0.0.21"
+        "mkdirp": "^0.5.1"
     },
     "devDependencies": {
         "typescript": "^2.0.3",
         "vscode": "^1.0.0",
         "mkdirp": "^0.5.1",
         "mocha": "^3.4.2",
-        "proxy-observe": "^0.0.21",
         "@types/node": "^7.0.22",
         "@types/mocha": "^3.4.2"
     }
