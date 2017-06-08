@@ -44,7 +44,7 @@ export class CMakeToolsHelper {
 
     activeCMakeConfigName()
     {
-        return this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
+        return this.cmakeTools.exports._backend.then(cmakeToolsWrapper => {
 
             // cmakeTools.exports         : CMakeToolsWrapper
             // cmakeToolsWrapper          : CMakeToolsWrapper
@@ -80,7 +80,7 @@ export class CMakeToolsHelper {
 
     updateCppTools() {
         this.activeCMakeConfigName().then(activeConfigName => {
-            this.cmakeTools.exports._impl.then(cmakeToolsWrapper => {
+            this.cmakeTools.exports._backend.then(cmakeToolsWrapper => {
                 // get all the configs
                 const codeModel    = cmakeToolsWrapper.codeModel;
                 const cmakeConfigs = ((typeof codeModel === 'undefined') || (codeModel == null))
