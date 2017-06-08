@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.7
+
+* Update for CMake Tools 0.9.7 (use the API's `_backend` instead of `_impl`)
+
 ## 0.0.6
 
 * Use CMake Tools 0.9.5 API to be notified by config/target changes
