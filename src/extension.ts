@@ -23,7 +23,8 @@ export function activate(context: vscode.ExtensionContext): state.CMakeToolsHelp
     [
         'show_active_cmake_config_name',
         'update_cpptools',
-        'install_cmake'
+        'install_cmake',
+        'change_cmake_version'
     ].forEach(cmdName =>
         registerCommand(cmdName)
     );

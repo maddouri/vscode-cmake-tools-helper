@@ -11,6 +11,7 @@ import * as request from 'request';
 import * as request_progress from 'request-progress';
 import * as url_exists from 'url-exists';
 import * as compare_versions from 'compare-versions';
+import * as child_process from 'child_process';
 
 export function cmakeArchBits(): number {
     const archName = os.arch();
@@ -286,4 +287,76 @@ export function downloadAndInstallCMake_actual(
             .pipe(fs.createWriteStream(filePath));
         }
     });
+}
+
+export async function changeCMakeVersion() {
+    const installedCMakes = getInstalledCMakeVersions();
+    if (installedCMakes == null) {
+        vscode.window.showErrorMessage('You have not installed any version of CMake. Make sure that you have run "Install CMake" at least once');
+        return;
+    }
+
+    const installedCMakesQuickPick = installedCMakes.map(cm => {
+        return {
+            label: `v${cm.version}`,
+            description: `${cm.path}`
+        };
+    })
+    const cmakeVersion = await vscode.window.showQuickPick(installedCMakesQuickPick, {
+        matchOnDescription: true,
+        matchOnDetail: true,
+        placeHolder: 'Choose a CMake version to use with CMake Tools',
+        ignoreFocusOut: true
+    });
+    if (cmakeVersion == null) {
+        return;
+    }
+
+    await vscode.workspace.getConfiguration('cmake').update('cmakePath', path.join(cmakeVersion.description, 'bin', 'cmake'), true);
+    const useCMakeServer = (() => {
+        try {
+            return compare_versions(cmakeVersion.label, '3.7.1') > 0;  // fails if rhs is not a valid SemVer
+        } catch (e) {
+            console.error('compare_versions(cmakeVersion.label, \'3.7.1\') failed [cmakeVersion.label:' + `${cmakeVersion.label}` + ']');
+            return false;
+        }
+    })();
+    await vscode.workspace.getConfiguration('cmake').update('useCMakeServer', useCMakeServer, true);
+
+    vscode.window.showInformationMessage(`CMake Tools will use CMake ${cmakeVersion.label} after restarting Visual Studio Code`);
+}
+
+export function getInstalledCMakeVersions() {
+    const cmakeDlPath = vscode.workspace.getConfiguration('cmake-tools-helper').get<string>('cmake_download_path');
+    if (cmakeDlPath == null) {
+        vscode.window.showErrorMessage('Please configure "cmake-tools-helper.cmake_download_path"');
+        return null;
+    }
+
+    const cmakeDirs = fs.readdirSync(cmakeDlPath).filter(file => fs.lstatSync(path.join(cmakeDlPath, file)).isDirectory());
+    if (cmakeDirs == null || cmakeDirs.length < 1) {
+        return null;
+    }
+
+    return cmakeDirs.map(d => {
+        const absPath = path.join(cmakeDlPath, d);
+        return {
+            version: computeCMakeVersion(absPath),
+            path: absPath
+        }
+    });
+}
+
+export function computeCMakeVersion(cmakeInstallDir: string): string {
+    const cmd = `"${cmakeInstallDir}${path.sep}bin${path.sep}cmake" --version`;
+    const cmakeOutput = child_process.execSync(cmd).toString();
+    // sample outputs: (obtained after some trial&error)
+    //  cmake version 2.4-patch 2 (the last "2" won't be matched...)
+    //  cmake version 3.9.0-rc1
+    //  cmake version 3.5.1
+    const cmakeVersion = cmakeOutput.match(/cmake\s+version\s+([0-9]+\.[0-9]+(\.[0-9]+)?\S*)/i);
+    if (cmakeVersion == null || cmakeVersion.length < 2) {
+        return null;
+    }
+    return cmakeVersion[1];
 }

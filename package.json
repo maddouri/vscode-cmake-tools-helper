@@ -54,6 +54,11 @@
                 "command": "cmake.install_cmake",
                 "title": "Install CMake",
                 "category": "CMake"
+            },
+            {
+                "command": "cmake.change_cmake_version",
+                "title": "Change CMake version",
+                "category": "CMake"
             }
         ],
         "configuration": {

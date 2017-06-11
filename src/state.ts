@@ -127,4 +127,12 @@ export class CMakeToolsHelper {
             console.log(e);
         }
     }
+
+    change_cmake_version() {
+        try {
+            helper.changeCMakeVersion();
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
