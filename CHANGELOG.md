@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.1.0
+
+* New feature: CMake downloader and version manager
+
 ## 0.0.7
 
 * Update for CMake Tools 0.9.7 (use the API's `_backend` instead of `_impl`)

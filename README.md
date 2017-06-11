@@ -16,6 +16,11 @@ This extension helps to bridge a gap between 2 great extensions:
 
 * Automatically updates cpptools' `c_cpp_properties.json` with the current CMake target's information (**build type**, **include directories** and **defines**)
 * Automatically updates cpptools' active configuration to match CMake Tools' active configuration and target
+* CMake downloader and version manager
+    * Install any version of CMake from the confort or your favorite editor! (command `CMake: Install CMake`)
+    * Multiple versions can be installed
+    * You can switch between them at any time (command `CMake: Change CMake version`)
+    * This extension can update CMake Tools' parameters (i.e. "CMake Path" and "Use CMake Server") after installing or changing the CMake version
 
 ## Prerequisites
 
