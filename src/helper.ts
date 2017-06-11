@@ -83,8 +83,8 @@ export function getRemoteCMakeVersionNames(onReceivedTagsCB) {
     let ghClient = new github({
         headers: {
             // https://developer.github.com/v3/#user-agent-required
-            'user-agent': 'vscode',
-            'Authorization': 'token 1869fb17253402d548aab24044f5b1f99722428e'  // TODO remove me
+            'user-agent': 'vscode'
+            //, 'Authorization': 'token MY_SECRET_TOKEN'  // TODO remove me
         }
     });
 
@@ -132,9 +132,6 @@ export async function downloadAndInstallCMake(versionName: string): Promise<stri
     while (platformName.length > 0) {
         const fileUrl = makeFileUrl(platformName[0]);
 
-        //const fileUrl = 'https://unsplash.it/458/354';
-        //const fileUrl = 'https://github.com/kevva/download/archive/v6.2.2.tar.gz';
-
         try {
             const tryMsg = `Trying to download ${fileUrl}`;
             console.log(tryMsg);
@@ -159,7 +156,6 @@ export async function downloadAndInstallCMake(versionName: string): Promise<stri
     }
 
     return new Promise<string>((resolve, reject) => {
-        console.log(`I prommise everithing is in ${extractionPath}`);
         resolve(extractionPath);
     });
 

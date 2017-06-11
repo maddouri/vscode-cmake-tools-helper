@@ -26,7 +26,7 @@ export class CMakeToolsHelper {
                     console.error(msg);
                     vscode.window.showErrorMessage(msg);
                 } else {
-                    vscode.workspace.getConfiguration('cmake-tools-helper').update('cmake_download_path', defaultCMakeDlPath);
+                    vscode.workspace.getConfiguration('cmake-tools-helper').update('cmake_download_path', defaultCMakeDlPath, true);
                     console.log(`cmake-tools-helper.cmake_download_path:${defaultCMakeDlPath}`);
                 }
             });
@@ -143,26 +143,27 @@ export class CMakeToolsHelper {
             const versionToDownload = await vscode.window.showQuickPick(remoteVersions, {
                 matchOnDescription: true,
                 matchOnDetail: true,
-                placeHolder: "Choose a CMake version to download and install",
+                placeHolder: 'Choose a CMake version to download and install',
                 ignoreFocusOut: true
             });
             if (versionToDownload == null) {
                 return null;
             }
 
-            const pathToInstalledCMake = await helper.downloadAndInstallCMake(versionToDownload);
-            if (pathToInstalledCMake == null) {
+            const installedCMakeRootDir = await helper.downloadAndInstallCMake(versionToDownload);
+            if (installedCMakeRootDir == null) {
                 console.error(`Failed to download CMake ${versionToDownload}`)
                 return null;
             }
+            const installedCMakePath = `${installedCMakeRootDir}${path.sep}bin${path.sep}cmake`;
 
             const currentCMakePath = vscode.workspace.getConfiguration('cmake').get<string>('cmakePath');
-            const msg = `CMake v${versionToDownload} installed in ${pathToInstalledCMake}`;
+            const msg = `CMake ${versionToDownload} installed in ${installedCMakeRootDir}`;
             console.log(msg);
             const setCMakePath = await vscode.window.showQuickPick([
                 {
                     label: 'Yes',
-                    description: `Set "cmake.cmakePath": "${pathToInstalledCMake}${path.sep}cmake"`
+                    description: `Set "cmake.cmakePath": "${installedCMakePath}"`
                 }, {
                     label: 'No',
                     description: `Keep "cmake.cmakePath": "${currentCMakePath}"`
@@ -170,12 +171,12 @@ export class CMakeToolsHelper {
             ], {
                 matchOnDescription: true,
                 matchOnDetail: true,
-                placeHolder: "Update cmake.cmakePath ?",
+                placeHolder: 'Update cmake.cmakePath ?',
                 ignoreFocusOut: true
             });
 
             if (setCMakePath.label == 'Yes') {
-                await vscode.workspace.getConfiguration('cmake').update('cmakePath', `${pathToInstalledCMake}${path.sep}cmake`);
+                await vscode.workspace.getConfiguration('cmake').update('cmakePath', `${installedCMakePath}`, true);
             }
         });
     }
