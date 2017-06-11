@@ -84,7 +84,8 @@
         "request-progress": "^3.0.0",
         "request": "^2.81.0",
         "decompress": "^4.2.0",
-        "url-exists": "^1.0.3"
+        "url-exists": "^1.0.3",
+        "compare-versions": "^3.0.1"
     },
     "devDependencies": {
         "typescript": "^2.3.4",
@@ -97,6 +98,7 @@
         "request-progress": "^3.0.0",
         "request": "^2.81.0",
         "decompress": "^4.2.0",
-        "url-exists": "^1.0.3"
+        "url-exists": "^1.0.3",
+        "compare-versions": "^3.0.1"
     }
 }

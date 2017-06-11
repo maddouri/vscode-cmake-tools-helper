@@ -10,6 +10,7 @@ import * as decompress from 'decompress';
 import * as request from 'request';
 import * as request_progress from 'request-progress';
 import * as url_exists from 'url-exists';
+import * as compare_versions from 'compare-versions';
 
 export function cmakeArchBits(): number {
     const archName = os.arch();
@@ -145,6 +146,10 @@ export function installCMake() {
 
             if (setCMakePath.label == 'Yes') {
                 await vscode.workspace.getConfiguration('cmake').update('cmakePath', `${installedCMakePath}`, true);
+                const useCMakeServer = compare_versions(versionToDownload, '3.7.1') > 0;
+                await vscode.workspace.getConfiguration('cmake').update('useCMakeServer', useCMakeServer, true);
+
+                vscode.window.showInformationMessage(`CMake Tools will use CMake ${versionToDownload} after restarting Visual Studio Code`);
             }
         });
     });
