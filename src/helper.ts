@@ -218,13 +218,13 @@ export function downloadAndInstallCMake_actual(
 
     const tryMsg = `Trying to download ${fileUrl}`;
     console.log(tryMsg);
-    vscode.window.setStatusBarMessage(tryMsg);
+    vscode.window.setStatusBarMessage(tryMsg, 4000);
 
     url_exists(fileUrl, (err, exists) => {
         if (!exists) {
             const errMsg = `The precompiled CMake archive [${fileUrl}] does not exist [Error: ${err}]`;
             console.error(errMsg);
-            vscode.window.setStatusBarMessage(errMsg);
+            vscode.window.setStatusBarMessage(errMsg, 4000);
             platformNames.shift();
             downloadAndInstallCMake_actual(
                 versionDirUrl, versionNumber, platformNames, platformExt,
@@ -254,7 +254,7 @@ export function downloadAndInstallCMake_actual(
                 console.log('CMake Download ', state);
                 const progPercent = (state.percent * 100.0).toFixed(2) + '%';
                 const progSpeed = (state.speed / 1024).toFixed(2) + ' Kib/s';
-                vscode.window.setStatusBarMessage(`CMake Download ${progPercent} @ ${progSpeed}`);
+                vscode.window.setStatusBarMessage(`CMake Download ${progPercent} @ ${progSpeed}`, 4000);
             })
             .on('error', e => {
                 // Do something with err
@@ -264,8 +264,8 @@ export function downloadAndInstallCMake_actual(
             })
             .on('end', () => {
                 // Do something after request finishes
-                vscode.window.setStatusBarMessage('CMake Download Finished. Extracting...');
-                decompress(filePath, path.dirname(filePath)).then(extractedData => {
+                vscode.window.setStatusBarMessage('CMake Download Finished. Extracting...', 4000);
+                decompress(filePath, path.dirname(filePath)).then(async extractedData => {
                     fs.unlink(filePath);
 
                     const extractionDir = extractedData[0].path.split(/[\/\\]/)[0];  // keep only the first "component" of the path
@@ -273,9 +273,9 @@ export function downloadAndInstallCMake_actual(
 
                     const okMsg = `CMake v${versionNumber} installed in ${extractionPath}`;
                     console.log(okMsg);
-                    vscode.window.setStatusBarMessage(okMsg, 1000);
+                    vscode.window.setStatusBarMessage(okMsg, 4000);
 
-                    onDownloadInstallFinish(extractionPath);
+                    await onDownloadInstallFinish(extractionPath);
                 });
             })
             .pipe(fs.createWriteStream(filePath));
