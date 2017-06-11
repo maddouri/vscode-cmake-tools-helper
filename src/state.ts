@@ -1,5 +1,6 @@
 'use strict';
 
+
 import * as vscode from 'vscode';
 import * as path from 'path';
 
@@ -7,12 +8,13 @@ import * as helper from './helper';
 import {c_cpp_properties} from './c_cpp_properties';
 
 
-
 export class CMakeToolsHelper {
     cmakeTools = vscode.extensions.getExtension("vector-of-bool.cmake-tools");
 
     constructor() {
         this.validateEnvironment();
+
+        helper.initCMakeDownloadDir();
 
         const onChange = () => this.update_cpptools();
 
@@ -100,6 +102,8 @@ export class CMakeToolsHelper {
         });
     }
 
+    // commands
+
     show_active_cmake_config_name() {
         try {
             this.activeCMakeConfigName().then(cfgName => vscode.window.showInformationMessage(`Active CMake Configuration [${cfgName}]`));
@@ -111,6 +115,22 @@ export class CMakeToolsHelper {
     update_cpptools() {
         try {
             this.updateCppTools();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    install_cmake() {
+        try {
+            helper.installCMake();
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    change_cmake_version() {
+        try {
+            helper.changeCMakeVersion();
         } catch (e) {
             console.log(e);
         }

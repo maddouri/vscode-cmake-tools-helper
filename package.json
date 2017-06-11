@@ -49,16 +49,26 @@
                 "command": "cmake.update_cpptools",
                 "title": "Update cpptools",
                 "category": "CMake"
+            },
+            {
+                "command": "cmake.install_cmake",
+                "title": "Install CMake",
+                "category": "CMake"
+            },
+            {
+                "command": "cmake.change_cmake_version",
+                "title": "Change CMake version",
+                "category": "CMake"
             }
         ],
         "configuration": {
             "type": "object",
             "title": "CMake Helper Configuration",
             "properties": {
-                "cmake-tools-helper.fs_delay_ms": {
-                    "type": "number",
-                    "default": 1000,
-                    "description": "Additional delay [ms] between 2 consecutive calls to fs.* methods. (e.g. fs.writeFile())"
+                "cmake-tools-helper.cmake_download_path": {
+                    "type": "string",
+                    "default": null,
+                    "description": "The path to a folder in which the CMake archives are downloaded and extracted"
                 }
             }
         }
@@ -74,7 +84,13 @@
         "vector-of-bool.cmake-tools"
     ],
     "dependencies": {
-        "mkdirp": "^0.5.1"
+        "mkdirp": "^0.5.1",
+        "github": "^9.2.0",
+        "request-progress": "^3.0.0",
+        "request": "^2.81.0",
+        "decompress": "^4.2.0",
+        "url-exists": "^1.0.3",
+        "compare-versions": "^3.0.1"
     },
     "devDependencies": {
         "typescript": "^2.3.4",
@@ -82,6 +98,12 @@
         "mkdirp": "^0.5.1",
         "mocha": "^3.4.2",
         "@types/node": "^7.0.27",
-        "@types/mocha": "^2.2.41"
+        "@types/mocha": "^2.2.41",
+        "github": "^9.2.0",
+        "request-progress": "^3.0.0",
+        "request": "^2.81.0",
+        "decompress": "^4.2.0",
+        "url-exists": "^1.0.3",
+        "compare-versions": "^3.0.1"
     }
 }
