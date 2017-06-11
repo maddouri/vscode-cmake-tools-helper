@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as decompress from 'decompress';
 import * as request from 'request';
 import * as request_progress from 'request-progress';
+import * as url_exists from 'url-exists';
 
 export function cmakeArchBits(): number {
     const archName = os.arch();
@@ -23,7 +24,7 @@ export function cmakeArchBits(): number {
 }
 
 // @return ['exact platform name', 'fallback name 1', 'fallback name 2']
-export function cmakePlatformName(): string[] {
+export function cmakePlatformNames(): string[] {
     const archBits = cmakeArchBits();
     const osName   = os.type();
     switch (osName) {
@@ -191,17 +192,21 @@ export function downloadAndInstallCMake(versionName: string, onDownloadInstallFi
     const versionDirUrl  = `http://cmake.org/files/v${versionMajor}.${versionMinor}/`;
 
     const fileNameBase = `cmake-${versionNumber}-`;
-    let   platformName = cmakePlatformName();
-    const extension    = cmakePlatformExtension();
-
     const downloadPath = vscode.workspace.getConfiguration('cmake-tools-helper').get<string>('cmake_download_path').replace(/[\/\\]+$/, '');
 
-    downloadAndInstallCMake_actual(versionDirUrl, versionNumber, cmakePlatformName(), cmakePlatformExtension(), downloadPath, onDownloadInstallFinish);
+    downloadAndInstallCMake_actual(
+        versionDirUrl, versionNumber, cmakePlatformNames(), cmakePlatformExtension(),
+        downloadPath,
+        onDownloadInstallFinish);
 }
 
-export function downloadAndInstallCMake_actual(versionDirUrl, versionNumber, platformNames, platformExt, downloadPath, onDownloadInstallFinish) {
+export function downloadAndInstallCMake_actual(
+    versionDirUrl: string, versionNumber: string, platformNames: string[], platformExt: string,
+    downloadPath: string,
+    onDownloadInstallFinish) {
 
     if (platformNames.length < 1) {
+        vscode.window.showErrorMessage('Failed to find valid precompiled CMake archives for your platform');
         return;
     }
 
@@ -211,61 +216,69 @@ export function downloadAndInstallCMake_actual(versionDirUrl, versionNumber, pla
     const fileUrl  = `${versionDirUrl}${fileName}`;
     const filePath = `${downloadPath}${path.sep}${fileName}`;
 
-    try {
-        const tryMsg = `Trying to download ${fileUrl}`;
-        console.log(tryMsg);
-        vscode.window.showInformationMessage(tryMsg);
+    const tryMsg = `Trying to download ${fileUrl}`;
+    console.log(tryMsg);
+    vscode.window.setStatusBarMessage(tryMsg);
 
-        // The options argument is optional so you can omit it
-        return request_progress(request(fileUrl), {
-            // throttle: 2000,                    // Throttle the progress event to 2000ms, defaults to 1000ms
-            // delay: 1000,                       // Only start to emit after 1000ms delay, defaults to 0ms
-            // lengthHeader: 'x-transfer-length'  // Length header to use, defaults to content-length
-        })
-        .on('progress', function (state) {
-            // The state is an object that looks like this:
-            // {
-            //     percent: 0.5,               // Overall percent (between 0 to 1)
-            //     speed: 554732,              // The download speed in bytes/sec
-            //     size: {
-            //         total: 90044871,        // The total payload size in bytes
-            //         transferred: 27610959   // The transferred payload size in bytes
-            //     },
-            //     time: {
-            //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
-            //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
-            //     }
-            // }
-            console.log('CMake Download ', state);
-            const progPercent = (state.percent * 100.0).toFixed(2) + '%';
-            const progSpeed   = (state.speed / 1024).toFixed(2) + ' Kib/s';
-            vscode.window.setStatusBarMessage(`CMake Download ${progPercent} @ ${progSpeed}`);
-        })
-        .on('error', function (err) {
-            // Do something with err
-            downloadAndInstallCMake_actual(versionDirUrl, versionNumber, platformNames.shift(), platformExt, downloadPath, onDownloadInstallFinish);
-        })
-        .on('end', function () {
-            // Do something after request finishes
-            vscode.window.setStatusBarMessage('CMake Download Finished. Extracting...');
-            decompress(filePath, path.dirname(filePath)).then(extractedData => {
-                fs.unlink(filePath);
+    url_exists(fileUrl, (err, exists) => {
+        if (!exists) {
+            const errMsg = `The precompiled CMake archive [${fileUrl}] does not exist [Error: ${err}]`;
+            console.error(errMsg);
+            vscode.window.setStatusBarMessage(errMsg);
+            platformNames.shift();
+            downloadAndInstallCMake_actual(
+                versionDirUrl, versionNumber, platformNames, platformExt,
+                downloadPath,
+                onDownloadInstallFinish);
+        } else {
+            // The options argument is optional so you can omit it
+            return request_progress(request(fileUrl), {
+                // throttle: 2000,                    // Throttle the progress event to 2000ms, defaults to 1000ms
+                // delay: 1000,                       // Only start to emit after 1000ms delay, defaults to 0ms
+                // lengthHeader: 'x-transfer-length'  // Length header to use, defaults to content-length
+            })
+            .on('progress', state => {
+                // The state is an object that looks like this:
+                // {
+                //     percent: 0.5,               // Overall percent (between 0 to 1)
+                //     speed: 554732,              // The download speed in bytes/sec
+                //     size: {
+                //         total: 90044871,        // The total payload size in bytes
+                //         transferred: 27610959   // The transferred payload size in bytes
+                //     },
+                //     time: {
+                //         elapsed: 36.235,        // The total elapsed seconds since the start (3 decimals)
+                //         remaining: 81.403       // The remaining seconds to finish (3 decimals)
+                //     }
+                // }
+                console.log('CMake Download ', state);
+                const progPercent = (state.percent * 100.0).toFixed(2) + '%';
+                const progSpeed = (state.speed / 1024).toFixed(2) + ' Kib/s';
+                vscode.window.setStatusBarMessage(`CMake Download ${progPercent} @ ${progSpeed}`);
+            })
+            .on('error', e => {
+                // Do something with err
+                const errMsg = `Error when downloading ${fileUrl}. ${e}`;
+                console.error(errMsg);
+                vscode.window.showErrorMessage(errMsg);
+            })
+            .on('end', () => {
+                // Do something after request finishes
+                vscode.window.setStatusBarMessage('CMake Download Finished. Extracting...');
+                decompress(filePath, path.dirname(filePath)).then(extractedData => {
+                    fs.unlink(filePath);
 
-                const extractionDir  = extractedData[0].path.split(/[\/\\]/)[0];  // keep only the first "component" of the path
-                const extractionPath = `${downloadPath}${path.sep}${extractionDir}`;
+                    const extractionDir = extractedData[0].path.split(/[\/\\]/)[0];  // keep only the first "component" of the path
+                    const extractionPath = `${downloadPath}${path.sep}${extractionDir}`;
 
-                const okMsg = `CMake v${versionNumber} installed in ${extractionPath}`;
-                console.log(okMsg);
-                vscode.window.setStatusBarMessage(okMsg, 1000);
+                    const okMsg = `CMake v${versionNumber} installed in ${extractionPath}`;
+                    console.log(okMsg);
+                    vscode.window.setStatusBarMessage(okMsg, 1000);
 
-                onDownloadInstallFinish(extractionPath);
-            });
-        })
-        .pipe(fs.createWriteStream(filePath));
-    } catch (e) {
-        const errMsg = `Failed to download ${fileUrl}. ${e}`;
-        console.error(errMsg);
-        vscode.window.showErrorMessage(errMsg);
-    }
-
+                    onDownloadInstallFinish(extractionPath);
+                });
+            })
+            .pipe(fs.createWriteStream(filePath));
+        }
+    });
 }

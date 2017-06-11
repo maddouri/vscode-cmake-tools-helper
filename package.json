@@ -83,7 +83,8 @@
         "github": "^9.2.0",
         "request-progress": "^3.0.0",
         "request": "^2.81.0",
-        "decompress": "^4.2.0"
+        "decompress": "^4.2.0",
+        "url-exists": "^1.0.3"
     },
     "devDependencies": {
         "typescript": "^2.3.4",
@@ -95,6 +96,7 @@
         "github": "^9.2.0",
         "request-progress": "^3.0.0",
         "request": "^2.81.0",
-        "decompress": "^4.2.0"
+        "decompress": "^4.2.0",
+        "url-exists": "^1.0.3"
     }
 }
