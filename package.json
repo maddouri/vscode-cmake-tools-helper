@@ -2,7 +2,7 @@
     "name": "cmake-tools-helper",
     "displayName": "CMake Tools Helper",
     "description": "Enables cpptools to automatically know the information parsed by CMake Tools (e.g. include directories and defines)",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "publisher": "maddouri",
     "license": "BSD-3-Clause",
     "icon": "res/icon.png",
@@ -30,7 +30,11 @@
     "activationEvents": [
         "onCommand:cmake.update_cpptools",
         "onCommand:cmake.show_active_cmake_config_name",
+        "onCommand:cmake.install_cmake",
+        "onCommand:cmake.change_cmake_version",
+
         "workspaceContains:CMakeLists.txt",
+
         "onCommand:cmake.buildWithTarget",
         "onCommand:cmake.cleanConfigure",
         "onCommand:cmake.configure",

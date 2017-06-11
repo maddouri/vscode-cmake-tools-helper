@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.1.1
+
+* Add the commands introduced in 0.1.0 to the extension's `activationEvents`
+* Minor fixes/updates to the readme
+
 ## 0.1.0
 
 * New feature: CMake downloader and version manager
