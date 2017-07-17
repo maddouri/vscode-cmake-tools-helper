@@ -85,6 +85,7 @@
     },
     "extensionDependencies": [
         "ms-vscode.cpptools",
+        "twxs.cmake",
         "vector-of-bool.cmake-tools"
     ],
     "dependencies": {
