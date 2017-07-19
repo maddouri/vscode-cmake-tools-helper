@@ -101,7 +101,8 @@ export class c_cpp_properties {
         });
     }
 
-    writeFile_actual(callback = null) {
+    writeFile_actual(callback) {
+        // TODO FIXME update the following comments
         // 1. open the file. write the active config alone. close the file.
         // 2. (disabled for now) open the file. write all the configs. close the file.
         // 3. this should
@@ -134,11 +135,11 @@ export class c_cpp_properties {
             }
         }
 
-        // write the first (i.e. active) config
-        // cpptools should use it as the active config
-        let this_activeConfigOnly = JSON.parse(JSON.stringify(this));  // "clone" ...
-        this_activeConfigOnly.configurations.splice(1);                // remove tail
-        fs.writeFile(filePath, JSON.stringify(this_activeConfigOnly, null, 4), err => {
+        // depending on the value of the "auto_set_cpptools_target" config option
+        // 'this' will contain either one (i.e. active) or all the configs
+        // if there is only one config, cpptools should use it as the active config
+        // if there are more, then the user should select the one that they want to use manually
+        fs.writeFile(filePath, JSON.stringify(this, null, 4), err => {
             checkError(err, 'Writing the active config');
 
             // write all the configs

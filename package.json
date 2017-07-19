@@ -73,6 +73,11 @@
                     "type": "string",
                     "default": null,
                     "description": "The path to a folder in which the CMake archives are downloaded and extracted"
+                },
+                "cmake-tools-helper.auto_set_cpptools_target": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "If 'true', this extension will automatically set the target of cpptools to be the same as the current CMake target."
                 }
             }
         }

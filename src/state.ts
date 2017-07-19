@@ -90,11 +90,25 @@ export class CMakeToolsHelper {
                                    : codeModel.configurations;  // CodeModelConfiguration
                 let   props        = new c_cpp_properties(cmakeConfigs);
 
-                // place the active config at the beginning of the array
-                let   vscConfigs      = props.configurations;
-                const activeConfigIdx = vscConfigs.findIndex(cfg => cfg.name == activeConfigName);
-                let   activeConfig    = vscConfigs.splice(activeConfigIdx, 1)[0];
-                vscConfigs.splice(0, 0, activeConfig);
+                const writeCurrentConfigOnly = vscode.workspace.getConfiguration('cmake-tools-helper').get<boolean>('auto_set_cpptools_target');
+
+                if (writeCurrentConfigOnly)
+                {
+                    // place the active config at the beginning of the array
+                    let   vscConfigs      = props.configurations;
+                    const activeConfigIdx = vscConfigs.findIndex(cfg => cfg.name == activeConfigName);
+                    let   activeConfig    = vscConfigs.splice(activeConfigIdx, 1)[0];
+                    vscConfigs.splice(0, 0, activeConfig);
+                    // keep the first (i.e. active) one only
+                    vscConfigs.splice(1);
+                }
+                else
+                {
+                    // remove the null config
+                    let   vscConfigs    = props.configurations;
+                    const nullConfigIdx = vscConfigs.findIndex(cfg => cfg.name == "null");
+                    vscConfigs.splice(nullConfigIdx, 1);
+                }
 
                 // @see this method's code and comments
                 props.writeFile();
