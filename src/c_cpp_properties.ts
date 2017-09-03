@@ -26,7 +26,7 @@ export class configuration {
         // collect includes
         const includeDirs = (target => {  // target: CodeModelTarget
             let incDirs: string[] = [];
-            if (target != null) {
+            if (target != null && target.fileGroups != null) {
                 target.fileGroups.forEach(fg => {
                     if (fg.hasOwnProperty('includePath')) {
                         Array.prototype.push.apply(  // concat incDirs and fg's (mapped) array of paths
@@ -42,7 +42,7 @@ export class configuration {
         // collect defines
         const macroDefines = (target => {  // target: CodeModelTarget
             let mDefs: string[] = [];
-            if (target != null) {
+            if (target != null && target.fileGroups != null) {
                 target.fileGroups.forEach(fg => {
                     if (fg.hasOwnProperty('defines')) {
                         Array.prototype.push.apply(mDefs, fg.defines);
