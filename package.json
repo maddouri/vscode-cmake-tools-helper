@@ -2,7 +2,7 @@
     "name": "cmake-tools-helper",
     "displayName": "CMake Tools Helper",
     "description": "Enables cpptools to automatically know the information parsed by CMake Tools (e.g. include directories and defines)",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "publisher": "maddouri",
     "license": "BSD-3-Clause",
     "icon": "res/icon.png",
@@ -15,7 +15,7 @@
         "url": "https://github.com/maddouri/vscode-cmake-tools-helper.git"
     },
     "engines": {
-        "vscode": "^1.12.0"
+        "vscode": "^1.22.0"
     },
     "categories": [
         "Other"
@@ -83,10 +83,11 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "extensionDependencies": [
         "ms-vscode.cpptools",
