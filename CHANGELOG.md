@@ -5,6 +5,7 @@
 * Merge https://github.com/maddouri/vscode-cmake-tools-helper/pull/7
 * Update the extension's configuration json files
 * Require VSCode >= 1.22.0
+* Fix README
 
 ## 0.1.1
 
