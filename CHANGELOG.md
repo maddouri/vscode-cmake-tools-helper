@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.2.1
+
+* Update dependencies
+
 ## 0.2.0
 
 * Merge https://github.com/maddouri/vscode-cmake-tools-helper/pull/7

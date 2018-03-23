@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as github from 'github';
+import * as github from '@octokit/rest';
 import * as os from 'os';
 import * as mkdirp from 'mkdirp';
 import * as fs from 'fs';
@@ -272,7 +272,7 @@ export function downloadAndInstallCMake_actual(
                 // Do something after request finishes
                 vscode.window.setStatusBarMessage('CMake Download Finished. Extracting...', 4000);
                 decompress(filePath, path.dirname(filePath)).then(async extractedData => {
-                    fs.unlink(filePath);
+                    fs.unlinkSync(filePath);
 
                     const extractionDir = extractedData[0].path.split(/[\/\\]/)[0];  // keep only the first "component" of the path
                     const extractionPath = `${downloadPath}${path.sep}${extractionDir}`;
