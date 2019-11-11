@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext): state.CMakeToolsHelp
 
     function registerCommand(cmdName) {
         // nice trick :)
-        // https://github.com/vector-of-bool/vscode-cmake-tools/blob/0.9.4/src/extension.ts
+        // https://github.com/microsoft/vscode-cmake-tools/blob/0.9.4/src/extension.ts
         let fn = cmakeToolsHelper[cmdName].bind(cmakeToolsHelper);
         context.subscriptions.push(vscode.commands.registerCommand('cmake.' + cmdName, _ => fn()));
     }

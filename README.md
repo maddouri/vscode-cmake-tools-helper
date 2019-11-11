@@ -8,7 +8,7 @@
 This extension helps to bridge a gap between 2 great extensions:
 
 * [cpptools (`ms-vscode.cpptools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) by Microsoft: Provides C and C++ language support (auto-completion, go to definition, etc.)
-* [CMake Tools (`vector-of-bool.cmake-tools`)](https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools) by vector-of-bool: Provides support for CMake-based projects (configure, build, etc.)
+* [CMake Tools (`ms-vscode.cmake-tools`)](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cmake-tools) by Microsoft: Provides support for CMake-based projects (configure, build, etc.)
 
 [CMake Tools Helper](https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper) enables cpptools to **automatically** know the information parsed by CMake Tools (such as **include directories** and **defines**) and use it to provide auto-completion, go to definition, etc.
 
@@ -41,7 +41,7 @@ Currently, (I mean... before this extension was released :wink: ) there is no wa
 
 Having found nothing to do the above automatically, I decided to create this extension!
 
-Please note that discussions were started at https://github.com/vector-of-bool/vscode-cmake-tools/issues/22 and https://github.com/Microsoft/vscode-cpptools/issues/156 to try to address the issue, but AFAIK there is nothing concrete yet.
+Please note that discussions were started at https://github.com/microsoft/vscode-cmake-tools/issues/22 and https://github.com/microsoft/vscode-cpptools/issues/156 to try to address the issue, but AFAIK there is nothing concrete yet.
 
 Another issue when wanting to use CMake, ~~lazy~~ users (such as myself ;) ) usually find themselves stuck with outdated versions of CMake. This extension tries to alleviate the "pain" of getting the latest version from [cmake.com/download](https://cmake.org/download/) by proposing to download, extract and enable **any version** of CMake directly from VS Code.
 
@@ -54,7 +54,7 @@ TL;DR: Ugly hacks, sweat and tears :)
 
 A combination of:
 
-* `vscode.extensions.getExtension("vector-of-bool.cmake-tools").exports`: is the CMake Tools extension API. It allows getting the name of the currently-selected build target as well as the list of valid CMake configurations. Currently, CMake Tools provides 2 implementations:
+* `vscode.extensions.getExtension("ms-vscode.cmake-tools").exports`: is the CMake Tools extension API. It allows getting the name of the currently-selected build target as well as the list of valid CMake configurations. Currently, CMake Tools provides 2 implementations:
     * legacy: compatible with CMake <= 3.7.1 and does not use CMake Server. It does provide a per-file information (as opposed to per-targte compilation info)
     * client: compatible with CMake > 3.7.1 and uses CMake Server. It provides a "code model" that provides per-target compilation information
 

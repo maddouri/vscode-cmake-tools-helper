@@ -9,7 +9,7 @@ import {c_cpp_properties} from './c_cpp_properties';
 
 
 export class CMakeToolsHelper {
-    cmakeTools = vscode.extensions.getExtension("vector-of-bool.cmake-tools");
+    cmakeTools = vscode.extensions.getExtension("ms-vscode.cmake-tools");
 
     constructor() {
         this.validateEnvironment();
