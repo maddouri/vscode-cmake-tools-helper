@@ -92,7 +92,7 @@
     "extensionDependencies": [
         "ms-vscode.cpptools",
         "twxs.cmake",
-        "vector-of-bool.cmake-tools"
+        "ms-vscode.cmake-tools"
     ],
     "dependencies": {
         "mkdirp": "^0.5.1",
